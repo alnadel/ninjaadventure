@@ -141,6 +141,9 @@ public class IcyTowerActivity extends BaseExample implements IAccelerometerListe
 		this.mOnScreenControlBaseTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mOnScreenControlTexture, this, "onscreen_control_base.png", 0, 0);
 		this.mOnScreenControlKnobTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mOnScreenControlTexture, this, "onscreen_control_knob.png", 128, 0);
 
+		this.mGround1Texture = new BitmapTextureAtlas(64, 64, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		this.mGround1TextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mGround1Texture, this, "box.png", 0, 0);
+		
 		this.mPlayerTexture = new BitmapTextureAtlas(64, 64, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 		this.mPlayerTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mPlayerTexture, this, "box.png", 0, 0);
 
