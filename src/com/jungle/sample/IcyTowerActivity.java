@@ -74,7 +74,7 @@ public class IcyTowerActivity extends BaseExample implements IAccelerometerListe
 	public float moveDistance = 0;
 	
 	protected TiledTextureRegion mBoxFaceTextureRegion;
-	protected TiledTextureRegion mCircleFaceTextureRegion;
+	protected TiledTextureRegion mPlayerTR;
 
 	protected PhysicsWorld mPhysicsWorld;
 	
@@ -131,10 +131,10 @@ public class IcyTowerActivity extends BaseExample implements IAccelerometerListe
 
 	@Override
 	public void onLoadResources() {
-		this.mBitmapTextureAtlas = new BitmapTextureAtlas(64, 64, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		this.mBitmapTextureAtlas = new BitmapTextureAtlas(1024, 512, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 		this.mBoxFaceTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mBitmapTextureAtlas, this, "face_box_tiled.png", 0, 0, 2, 1); // 64x32
-		this.mCircleFaceTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mBitmapTextureAtlas, this, "face_circle_tiled.png", 0, 32, 2, 1); // 64x32
+		this.mPlayerTR = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mBitmapTextureAtlas, this, "player.png", 0, 0, 8, 4); // 64x32
 		
 
 		this.mOnScreenControlTexture = new BitmapTextureAtlas(256, 128, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
@@ -224,13 +224,19 @@ public class IcyTowerActivity extends BaseExample implements IAccelerometerListe
 						moveDistance = LEVEL_POOL.moveDistance();
 					else
 						moveDistance = 0;
-				}else{
+				}
+				else if(mPlayer.getJumpHeight()>0){
 					if(mPlayer.getY() < CAMERA_HEIGHT/4)
 					{
 						ground.setPosition(ground.getX(), ground.getY()+mPlayer.getJumpHeight());
 						mPlayer.setPosition(mPlayer.getX(), mPlayer.getY()+mPlayer.getJumpHeight());
 						//mPlayer.jump();
 					}
+				}
+				else 
+				{
+					if(!LEVEL_POOL.collisionWithGround(mPlayer, ground.getY()))
+							mPlayer.startFalling();
 				}
 				
 				/*
@@ -332,13 +338,18 @@ public class IcyTowerActivity extends BaseExample implements IAccelerometerListe
 		}
 		this.mScene.attachChild(this.ground);
 		
-		this.addPlayer(CAMERA_WIDTH/2, CAMERA_HEIGHT-64-120);
+		this.addPlayer(CAMERA_WIDTH/2, CAMERA_HEIGHT-128-120);
 	}
 	
 	private void addPlayer(final float pX, final float pY) {
-		this.mPlayer = new Player(pX, pY, 32, 64, this.mPlayerTextureRegion, CAMERA_WIDTH, CAMERA_HEIGHT);
+		//this.mPlayer = new Player(pX, pY, 32, 64, this.mPlayerTextureRegion, CAMERA_WIDTH, CAMERA_HEIGHT);
+		this.mPlayer = new Player(pX, pY, this.mPlayerTR, CAMERA_WIDTH, CAMERA_HEIGHT);
 		this.mScene.attachChild(mPlayer);
-		
+		//this.mScene.attachChild();
+		//final AnimatedSprite helicopter = new AnimatedSprite(pX, pY, this.mPlayerTR);
+		//helicopter.animate(new long[] { 100, 100 }, 1, 8, true);
+		//helicopter.animate(new long[] { 1, 1, 1, 1, 1, 1, 1, 1 }, 1, 8, true);
+		//this.mScene.attachChild(helicopter);
 	}
 
 		 /**

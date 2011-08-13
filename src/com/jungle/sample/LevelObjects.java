@@ -2,8 +2,6 @@ package com.jungle.sample;
 
 import java.util.ArrayList;
 import java.util.Timer;
-import java.util.TimerTask;
-
 import org.anddev.andengine.entity.shape.IShape;
 import org.anddev.andengine.opengl.texture.region.TextureRegion;
 import org.anddev.andengine.util.pool.GenericPool;
@@ -14,7 +12,7 @@ public class LevelObjects extends GenericPool<GroundSprite> {
 	protected static final int CAMERA_HEIGHT = 600;
 	
 	private int currentGround = 0;
-	private int currentLevel = 30;
+	private int currentLevel = 1;
 	private static int ALL_LEVELS = 30;
 	private int platformStep = 150;
 	
@@ -110,10 +108,10 @@ public class LevelObjects extends GenericPool<GroundSprite> {
 				if(player.collidesWith((IShape) objects.get(i)))
 				{
 					final float collisionY = ((GroundSprite) objects.get(i)).getY()+ground_move;
-					if((player.getY() + player.getHeightScaled() - ((GroundSprite) objects.get(i)).getHeightScaled()) <= collisionY )
+					if((player.getY() + player.getHeight() - ((GroundSprite) objects.get(i)).getHeightScaled()) <= collisionY )
 					{
 						player.stopFalling();
-						player.setPosition(player.getX(), collisionY-player.getHeightScaled());
+						player.setPosition(player.getX(), collisionY-player.getHeight());
 						
 						
 						
