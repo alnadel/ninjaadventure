@@ -196,17 +196,29 @@ public class MainGamePanel extends SurfaceView implements
 		canvas.drawColor(Color.rgb(250, 205, 25));
 		
 		game.draw(canvas);
-		if(player.isJumping() && player.getJumpHeight() < 0){
+		if(player.isJumping()){
 			
+			if( player.getJumpHeight() < 0 ) {
+				GroundSprite collidedWith = game.getGrounds().collisionDetection(player.getX(), player.getY(), pwidth, pheight);
 			
-			GroundSprite collidedWith = game.getGrounds().collisionDetection(player.getX(), player.getY(), pwidth, pheight);
-		
-			if(collidedWith != null) {
-				player.stopFalling();
-				//zmienic na hitarea
-				player.setY(collidedWith.getY()-pheight);
-				player.jump();
+				if(collidedWith != null) {
+					player.stopFalling();
+					/* 
+					 * TODO: check collision, getY eror -> o update?
+					 * player.setY(collidedWith.getHitarea().getY1()-pheight);
+					 */
+
+					player.jump();
+				}
+			}else{
+				
+				if(player.getY() < stageHeight/2) {
+					//int y = stageHeight/3 - player.getY(); 
+					game.getGrounds().moveGrounds((int)player.getJumpHeight());
+					player.setY(player.getY()+(int)player.getJumpHeight());
+				}
 			}
+			
 		}
 		
 		player.draw(canvas);

@@ -5,6 +5,8 @@ import com.jungle.sprite.HitArea;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.Log;
 
@@ -17,8 +19,8 @@ public class GroundSprite {
 	private int width;
 	private int height;
 	
-	private int[] hitarea = new int[4];
-	
+	//private int[] hitarea = new int[4];
+	private HitArea hitarea;
 	private boolean destroyable;
 	private boolean moveable;
 	
@@ -47,10 +49,11 @@ public class GroundSprite {
 		switch(type){
 			case 0:
 				Log.d("GroundSprite", "Creating sprite "+floor+" Type: "+type+" Width: "+this.width);
-				hitarea[0] = this.x;
+				/*hitarea[0] = this.x;
 				hitarea[1] = this.y;
 				hitarea[2] = this.x+this.width;
-				hitarea[3] = this.y+this.height;
+				hitarea[3] = this.y+this.height;*/
+				hitarea = new HitArea(this.x, this.y+(int)(36*scale), this.x+this.width, this.y+this.height);
 				
 				if(this.width>tileWidth){
 					//Log.d("GroundSprite", "Creating sprite "+floor+". Width: "+width);
@@ -84,11 +87,6 @@ public class GroundSprite {
 	    Rect src, dest;
 
 		// assume all of the src bitmaps are the same height & width
-	    
-	    
-	    //wideBmp = Bitmap.createBitmap(srcBmps[0].getWidth() * srcBmps.length, 
-	    //    srcBmps[0].getHeight(), srcBmps[0].getConfig());
-
 	    wideBmp = Bitmap.createBitmap(srcBmps[0].getWidth() * srcBmps.length-1 + srcBmps[srcBmps.length-1].getWidth(), 
 		        srcBmps[0].getHeight(), srcBmps[0].getConfig());
 
@@ -111,14 +109,26 @@ public class GroundSprite {
 
 	
 	public void draw(Canvas canvas) {
+		/*Paint paint = new Paint();
+		paint.setStyle(Paint.Style.FILL);
+		paint.setColor(Color.RED);*/
 		
 		canvas.drawBitmap(bitmap, x, y, null);
+		
+		
+		//draw red rectangle as hitarea
+		
+		/*canvas.drawRect(getHitarea().getX1()
+				, getHitarea().getY1()
+				, getHitarea().getX2()
+				, getHitarea().getY2()
+				, paint);*/
 	}
 	
 	public boolean collides(int x1, int y1, int x2, int y2) {
 		
-		if(y2 > hitarea[1] && y2 < hitarea[3] ) {
-			if( (x1 > hitarea[0] && x1< hitarea[2]) || (x2 > hitarea[0] && x2< hitarea[2]) || (x1 < hitarea[0] && x2 > hitarea[2]) ){
+		if(y2 > hitarea.getY1() && y2 < hitarea.getY2() ) {
+			if( (x1 > hitarea.getX1() && x1< hitarea.getX2()) || (x2 > hitarea.getX1() && x2< hitarea.getX2()) || (x1 < hitarea.getX1() && x2 > hitarea.getX2()) ){
 				return true;
 			}
 		}
@@ -179,6 +189,10 @@ public class GroundSprite {
 
 	public void setMoveable(boolean moveable) {
 		this.moveable = moveable;
+	}
+
+	public HitArea getHitarea() {
+		return hitarea;
 	}
 		
 }

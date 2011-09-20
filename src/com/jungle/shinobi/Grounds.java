@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.util.Log;
 
 public class Grounds {
@@ -55,21 +57,26 @@ public class Grounds {
 	public GroundSprite collisionDetection(int x, int y, int width, int height){
 		
 		int i=0;
-		while( groundsArray.get(i).getY()+64 >= y+height) {
+		
+		try{
+			while( groundsArray.get(i).getY()+64 >= y+height) {
+		
 			
-			Log.d("Grounds", "Player Y: "+(y+height));
-			Log.d("Grounds", "Testing ground "+i+" Y: "+groundsArray.get(i).getY());
-			if( groundsArray.get(i).collides(x, y, x+width, y+height) ){
-				Log.d("Grounds", "Collides with Y: "+groundsArray.get(i).getY());
-				return (GroundSprite) groundsArray.get(i);
-			}
-			
-			if(groundsArray.size() > i) {
+				Log.d("Grounds", "Player Y: "+(y+height));
+				Log.d("Grounds", "Testing ground "+i+" Y: "+groundsArray.get(i).getY());
+				if( groundsArray.get(i).collides(x, y, x+width, y+height) ){
+					this.update();
+					Log.d("Grounds", "Collides with Y: "+groundsArray.get(i).getY());
+					return (GroundSprite) groundsArray.get(i);
+				}
 				i++;
-			}else{
-				break;
+				/*if(groundsArray.size() > i) {
+					i++;
+				}else{
+					break;
+				}*/
 			}
-		}
+		}catch(Error e){};
 		return null;
 		
 	}
@@ -77,9 +84,11 @@ public class Grounds {
 	public void update() {
 		
 		//removing
-		while( groundsArray.get(0).getY() > stageHeight) {
-			groundsArray.remove(0);
-		}
+		try{
+			while( groundsArray.get(0).getY() > stageHeight) {
+				groundsArray.remove(0);
+			}
+		}catch(Error e){};
 		
 		//creating new
 		while(groundsArray.get(groundsArray.size()-1).getY() > -stageHeight ) {
@@ -102,10 +111,24 @@ public class Grounds {
 		}
 	}
 	
+	public void moveGrounds(int y) {
+		for(int i=0; i<groundsArray.size(); i++) {
+			((GroundSprite) groundsArray.get(i)).setY(groundsArray.get(i).getY()+y);
+			//move hitarea
+			//((GroundSprite) groundsArray.get(i)).getHitarea().update(0, y);
+			groundsArray.get(i).getHitarea().setY1(groundsArray.get(i).getHitarea().getY1()+y);
+			groundsArray.get(i).getHitarea().setY2(groundsArray.get(i).getHitarea().getY2()+y);
+		}
+		
+	}
+	
+	
 	public void draw(Canvas canvas){
+		
 		
 		for(int i=0; i<groundsArray.size(); i++) {
 			((GroundSprite) groundsArray.get(i)).draw(canvas);
+
 		}
 		
 	}

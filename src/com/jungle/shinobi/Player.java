@@ -16,7 +16,7 @@ public class Player extends AnimatedSprite {
 	private boolean isJumping = true;
 	private float speed = 0;
 	private float jumpHeight = 0;
-	private float jumpScale = 0.2f;
+	private float jumpScale = 0.1f;
 	
 	private int sceneWidth = 0;
 	private int sceneHeight = 0;
