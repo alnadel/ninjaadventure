@@ -25,14 +25,11 @@ public class Grounds {
 	private int stageHeight;
 	private ArrayList<GroundSprite> groundsArray = new ArrayList<GroundSprite>();
 	private Bitmap bitmap;
-	private Bitmap cornerLeft;
-	private Bitmap cornerRight;
+
 	
-	public Grounds(Bitmap bitmap, int x, int y, int lvl, float scale, int stageWidth, int stageHeight, Bitmap cornerLeft, Bitmap cornerRight) {
+	public Grounds(Bitmap bitmap, int x, int y, int lvl, float scale, int stageWidth, int stageHeight) {
 		
 		this.bitmap = bitmap;
-		this.cornerLeft = cornerLeft;
-		this.cornerRight = cornerRight;
 		
 		if(lvl < 5){
 			//this.bitmap = Bitmap.createBitmap(bitmap, 0, (int)(0*scale), (int)(128*scale), (int)(height*scale));
