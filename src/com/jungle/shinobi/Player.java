@@ -13,7 +13,7 @@ public class Player extends AnimatedSprite {
 	private static float maxSpeed = 10;
 	private static final String TAG = MainGamePanel.class.getSimpleName();
 	
-	private boolean isJumping = false;
+	private boolean isJumping = true;
 	private float speed = 0;
 	private float jumpHeight = 0;
 	private float jumpScale = 0.1f;
