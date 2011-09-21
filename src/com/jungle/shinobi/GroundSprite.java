@@ -4,10 +4,14 @@ import com.jungle.sprite.HitArea;
 
 
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.Log;
 
 public class GroundSprite {
@@ -25,6 +29,8 @@ public class GroundSprite {
 	private boolean moveable;
 	
 	private int floor;
+	Canvas wideBmpCanvas;
+	private float scale;
 	
 	public GroundSprite(Bitmap bitmap, int x, int y, int width, int height, float scale, int floor, boolean destroyable, boolean moveable, int type){
 		
@@ -37,6 +43,7 @@ public class GroundSprite {
 		this.destroyable = destroyable;
 		this.moveable = moveable;
 		this.floor = floor;
+		this.scale = scale;
 		
 		int bitmapWidth = (int)(bitmap.getWidth()*scale);
 		int bitmapHeight = (int)(bitmap.getHeight()*scale);
@@ -74,11 +81,35 @@ public class GroundSprite {
 				}else{
 					Log.d("GroundSprite", "Cutting sprite, bmp height: "+bitmapHeight+" sprite: "+this.height);
 					this.bitmap = Bitmap.createBitmap(this.bitmap, 0, 0, this.width, this.height);
+					
 				}
 				
-				
+				this.bitmap = roundedCorners(this.bitmap);
 				break;
 		}
+	}
+	
+	public Bitmap roundedCorners(Bitmap bitmap) {
+		
+		Bitmap output = Bitmap.createBitmap(width,
+		        height, Config.ARGB_8888);
+		    Canvas canvas = new Canvas(output);
+
+		    final int color = 0xff424242;
+		    final Paint paint = new Paint();
+		    final Rect rect = new Rect(hitarea.getX1()-this.x, hitarea.getY1()-this.y-(int)(12*scale), width, hitarea.getY2()-this.y);
+		    final RectF rectF = new RectF(rect);
+		    final float roundPx = 8;
+
+		    paint.setAntiAlias(true);
+		    canvas.drawARGB(0, 0, 0, 0);
+		    paint.setColor(color);
+		    canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+
+		    paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+		    canvas.drawBitmap(bitmap, rect, rect, paint);
+
+		    return output;
 	}
 	
 	public Bitmap TiledBitmap(Bitmap srcBmps[]) {

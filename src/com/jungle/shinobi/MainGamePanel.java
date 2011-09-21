@@ -107,7 +107,7 @@ public class MainGamePanel extends SurfaceView implements
 				, stageWidth/2 - 115, stageHeight-100-10 );
 		
 
-		game = new Game(BitmapFactory.decodeResource(getResources(), R.drawable.top_bar), 0, 0, BitmapFactory.decodeResource(getResources(), R.drawable.terrain), stageWidth, stageHeight);
+		game = new Game(BitmapFactory.decodeResource(getResources(), R.drawable.top_bar), 0, 0, BitmapFactory.decodeResource(getResources(), R.drawable.terrain), stageWidth, stageHeight, BitmapFactory.decodeResource(getResources(), R.drawable.rounded_left), BitmapFactory.decodeResource(getResources(), R.drawable.rounded_right));
 		
 		thread = new MainThread(getHolder(), this);
 		

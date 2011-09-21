@@ -22,7 +22,7 @@ public class Game {
 	private Grounds grounds;
 	
 	
-	public Game(Bitmap topbar, int x, int y, Bitmap groundbmp, int stageWidth, int stageHeight) {
+	public Game(Bitmap topbar, int x, int y, Bitmap groundbmp, int stageWidth, int stageHeight, Bitmap cornerLeft, Bitmap cornerRight) {
 
 		scale = (float)stageWidth/topbar.getWidth();
 		
@@ -41,7 +41,7 @@ public class Game {
         this.x = x;
         this.y = y;
         
-        grounds = new Grounds(groundbmp, 0, stageHeight, lvl, scale, stageWidth, stageHeight);
+        grounds = new Grounds(groundbmp, 0, stageHeight, lvl, scale, stageWidth, stageHeight, cornerLeft, cornerRight);
         
 		setGold(0);
 		setTime(120);
