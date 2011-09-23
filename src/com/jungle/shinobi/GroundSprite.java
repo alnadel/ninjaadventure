@@ -31,8 +31,12 @@ public class GroundSprite {
 	private int floor;
 	Canvas wideBmpCanvas;
 	private float scale;
+
+	private int stageWidth;
+
+	private int stageHeight;
 	
-	public GroundSprite(Bitmap bitmap, int x, int y, int width, int height, float scale, int floor, boolean destroyable, boolean moveable, int type){
+	public GroundSprite(Bitmap bitmap, int x, int y, int width, int height, float scale, int floor, boolean destroyable, boolean moveable, int type, int stageWidth, int stageHeight){
 		
 		this.bitmap = bitmap;
 		this.x = x;
@@ -51,6 +55,9 @@ public class GroundSprite {
 		int tileWidth = (int)(128*scale);
 		int tileHeight = (int)(64*scale);
 		
+		this.stageWidth = stageWidth;
+		this.stageHeight = stageHeight;
+		
 		this.bitmap = Bitmap.createScaledBitmap(bitmap, bitmapWidth, bitmapHeight, true);
 		
 		switch(type){
@@ -60,7 +67,7 @@ public class GroundSprite {
 				hitarea[1] = this.y;
 				hitarea[2] = this.x+this.width;
 				hitarea[3] = this.y+this.height;*/
-				hitarea = new HitArea(this.x, this.y+(int)(36*scale), this.x+this.width, this.y+this.height);
+				hitarea = new HitArea(0, (int)(30*scale), this.width, this.height-(int)(10*scale), this.x, this.y);
 				
 				if(this.width>tileWidth){
 					//Log.d("GroundSprite", "Creating sprite "+floor+". Width: "+width);
@@ -74,8 +81,9 @@ public class GroundSprite {
 					}
 					
 					Log.d("GroundSprite", "Last Object: "+(this.width - (objects*tileWidth)));
-					bmp[objects] = Bitmap.createBitmap(this.bitmap, 0, 0, (this.width - (objects*tileWidth)), tileHeight);
-					
+					if(this.width - (objects*tileWidth) > 0) {
+						bmp[objects] = Bitmap.createBitmap(this.bitmap, 0, 0, (this.width - (objects*tileWidth)), tileHeight);
+					}
 					Log.d("GroundSprite", "Assuming bitmaps...");
 					this.bitmap = TiledBitmap(bmp);
 				}else{
@@ -91,13 +99,16 @@ public class GroundSprite {
 	
 	public Bitmap roundedCorners(Bitmap bitmap) {
 		
+		if(bitmap.getWidth()>= stageWidth) {
+			return bitmap;
+		}
 		Bitmap output = Bitmap.createBitmap(width,
 		        height, Config.ARGB_8888);
 		    Canvas canvas = new Canvas(output);
 
 		    final int color = 0xff424242;
 		    final Paint paint = new Paint();
-		    final Rect rect = new Rect(hitarea.getX1()-this.x, hitarea.getY1()-this.y-(int)(12*scale), width, hitarea.getY2()-this.y);
+		    final Rect rect = new Rect(hitarea.getX1()-this.x, hitarea.getY1()-this.y-(int)(6*scale), width, height);
 		    final RectF rectF = new RectF(rect);
 		    final float roundPx = 8;
 
@@ -140,20 +151,20 @@ public class GroundSprite {
 
 	
 	public void draw(Canvas canvas) {
-		/*Paint paint = new Paint();
+		Paint paint = new Paint();
 		paint.setStyle(Paint.Style.FILL);
-		paint.setColor(Color.RED);*/
+		paint.setColor(Color.TRANSPARENT);
 		
 		canvas.drawBitmap(bitmap, x, y, null);
 		
 		
 		//draw red rectangle as hitarea
 		
-		/*canvas.drawRect(getHitarea().getX1()
+		canvas.drawRect(getHitarea().getX1()
 				, getHitarea().getY1()
 				, getHitarea().getX2()
 				, getHitarea().getY2()
-				, paint);*/
+				, paint);
 	}
 	
 	public boolean collides(int x1, int y1, int x2, int y2) {
@@ -224,6 +235,14 @@ public class GroundSprite {
 
 	public HitArea getHitarea() {
 		return hitarea;
+	}
+
+	public int getFloor() {
+		return floor;
+	}
+
+	public void setFloor(int floor) {
+		this.floor = floor;
 	}
 		
 }

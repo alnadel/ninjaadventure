@@ -10,6 +10,7 @@ public class Game {
 	private int lvl = 0;
 	private int gold = 0;
 	private int time = 0;
+	private int floor = 0;
 	
 	private Bitmap topbar;
 	private int x;
@@ -45,9 +46,7 @@ public class Game {
         
 		setGold(0);
 		setTime(120);
-		
-		
-		
+				
 	}
 
 	public int getLvl() {
@@ -74,6 +73,14 @@ public class Game {
 		this.time = time;
 	}
 	
+	public int getFloor() {
+		return floor;
+	}
+
+	public void setFloor(int floor) {
+		this.floor = floor;
+	}
+
 	public Grounds getGrounds() {
 		return grounds;
 	}

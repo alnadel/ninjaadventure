@@ -49,7 +49,7 @@ public class Grounds {
 		
 		this.scale = scale;
 		//GroundSprite object = new GroundSprite(bitmap, (int)(x*scale), (int)(y-height*scale), stageWidth, stageHeight, false, false, 0);
-		GroundSprite object = new GroundSprite(bitmap, (int)(x*scale), (int)(y-height*scale), (int)(stageWidth/scale), stageHeight, scale, floors++, false, false, 0);
+		GroundSprite object = new GroundSprite(bitmap, (int)(x*scale), (int)(y-height*scale), (int)(stageWidth/scale), stageHeight, scale, floors++, false, false, 0, this.stageWidth, this.stageHeight);
 		groundsArray.add(object );
 		
 		update();
@@ -107,18 +107,20 @@ public class Grounds {
 			boolean moveable = false;
 			int type = 0;
 			
-			GroundSprite object = new GroundSprite(bitmap, x, y, (int)(width), (int)(height), scale, floors++, destroyable, moveable, type);
+			GroundSprite object = new GroundSprite(bitmap, x, y, (int)(width), (int)(height), scale, floors++, destroyable, moveable, type, this.stageWidth, this.stageHeight);
 			groundsArray.add(object );
 		}
 	}
 	
 	public void moveGrounds(int y) {
 		for(int i=0; i<groundsArray.size(); i++) {
+			groundsArray.get(i).getHitarea().update(groundsArray.get(i).getX(), y+groundsArray.get(i).getY());
 			((GroundSprite) groundsArray.get(i)).setY(groundsArray.get(i).getY()+y);
 			//move hitarea
 			//((GroundSprite) groundsArray.get(i)).getHitarea().update(0, y);
-			groundsArray.get(i).getHitarea().setY1(groundsArray.get(i).getHitarea().getY1()+y);
-			groundsArray.get(i).getHitarea().setY2(groundsArray.get(i).getHitarea().getY2()+y);
+			//groundsArray.get(i).getHitarea().setY1(groundsArray.get(i).getHitarea().getY1()+y+groundsArray.get(i).getY());
+			//groundsArray.get(i).getHitarea().setY2(groundsArray.get(i).getHitarea().getY2()+y+groundsArray.get(i).getY());
+			
 		}
 		
 	}

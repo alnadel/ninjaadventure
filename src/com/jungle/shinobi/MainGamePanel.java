@@ -204,7 +204,12 @@ public class MainGamePanel extends SurfaceView implements
 					 * TODO: check collision, getY eror -> o update?
 					 * player.setY(collidedWith.getHitarea().getY1()-pheight);
 					 */
-
+					//player.setY(collidedWith.getHitarea().getY1()-pheight);
+					Log.d(TAG, "Current Player Y: "+player.getY());
+					
+					
+					game.setFloor(collidedWith.getFloor());
+					Log.d(TAG, "Set Player Y: "+player.getY());
 					player.jump();
 				}
 			} else {
