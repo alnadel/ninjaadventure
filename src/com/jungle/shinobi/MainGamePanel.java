@@ -6,6 +6,7 @@ import com.jungle.shinobi.R.drawable;
 import com.jungle.buttons.TwoSidedPad;
 import com.jungle.shinobi.sprite.AnimatedSprite;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,7 +23,7 @@ import android.widget.ImageView;
  * to the screen.
  */
 public class MainGamePanel extends SurfaceView implements
-		SurfaceHolder.Callback {
+		SurfaceHolder.Callback, MainPanelInterface {
 
 	private static final String TAG = MainGamePanel.class.getSimpleName();
 
@@ -65,7 +66,7 @@ public class MainGamePanel extends SurfaceView implements
 		this.pheight = pheight;
 	}
 
-	public MainGamePanel(Context context, int width, int height) {
+	public MainGamePanel(Activity context, int width, int height) {
 		super(context);
 
 		this.stageWidth = width;
@@ -88,7 +89,7 @@ public class MainGamePanel extends SurfaceView implements
 
 		// adding the callback (this) to the surface holder to intercept events
 		getHolder().addCallback(this);
-
+		
 		Bitmap bmp = BitmapFactory.decodeResource(getResources(),
 				R.drawable.player);
 		player = new Player(Bitmap.createScaledBitmap(bmp, bwidth, bheight,
@@ -252,7 +253,7 @@ public class MainGamePanel extends SurfaceView implements
 
 		if (canvas != null && fps != null) {
 			Paint paint = new Paint();
-			paint.setARGB(255, 255, 255, 255);
+			paint.setARGB(255, 0, 0, 0);
 			canvas.drawText(fps, this.getWidth() - 50, 20, paint);
 		}
 	}
