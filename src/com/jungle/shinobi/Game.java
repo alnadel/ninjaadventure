@@ -16,6 +16,7 @@ public class Game {
 	private int x;
 	private int y;
 	private float scale;
+	private boolean isPaused = true;
 	
 	private Bitmap groundbmp;
 
@@ -83,6 +84,14 @@ public class Game {
 
 	public Grounds getGrounds() {
 		return grounds;
+	}
+
+	public boolean isPaused() {
+		return isPaused;
+	}
+
+	public void setPaused(boolean isPaused) {
+		this.isPaused = isPaused;
 	}
 
 	public void draw(Canvas canvas) {

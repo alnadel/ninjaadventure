@@ -8,6 +8,7 @@ import com.jungle.shinobi.sprite.AnimatedSprite;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
@@ -30,6 +31,7 @@ public class MainGamePanel extends SurfaceView implements
 	private MainThread thread;
 	public Player player;
 	private TwoSidedPad pad;
+	private Activity activity;
 
 	public int stageWidth = 320;
 	public int stageHeight = 470;
@@ -69,6 +71,7 @@ public class MainGamePanel extends SurfaceView implements
 	public MainGamePanel(Activity context, int width, int height) {
 		super(context);
 
+		this.activity = context;
 		this.stageWidth = width;
 		this.stageHeight = height;
 
@@ -108,10 +111,22 @@ public class MainGamePanel extends SurfaceView implements
 
 		thread = new MainThread(getHolder(), this);
 
+		player.setY(stageHeight-pheight-(int)(36*scale));
 		// make the GamePanel focusable so it can handle events
 		setFocusable(true);
+		invalidate();
+		
+		this.postDelayed(new Runnable(){
+
+			@Override
+			public void run() {
+				player.jump();
+				game.setPaused(false);
+				
+			}}, 5000);
 	}
 
+	
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
@@ -154,6 +169,7 @@ public class MainGamePanel extends SurfaceView implements
 			pad.activeDir = 0;
 			player.stand();
 		}
+		invalidate();
 		return true;
 	}
 
@@ -181,56 +197,72 @@ public class MainGamePanel extends SurfaceView implements
 		case KeyEvent.KEYCODE_DPAD_RIGHT:
 			player.moveRight();
 			return true;
+		case KeyEvent.KEYCODE_BACK:
+			backToMenu();
+			return true;	
 		}
 
 		Log.d(TAG, "Another key pressed");
 		return false;
 	}
-
+	
+	public void backToMenu() {
+		//Intent myIntent = new Intent(this.getContext(), GameActivity.class);
+        //activity.startActivityForResult(myIntent, 0);
+        //thread.setRunning(false);
+		//activity.finish();
+		game.setPaused(true);
+	}
+	
 	public void render(Canvas canvas) {
 
 		canvas.drawColor(Color.rgb(250, 205, 25));
 
 		game.draw(canvas);
-		if (player.isJumping()) {
-
-			if (player.getJumpHeight() < 0) {
-				GroundSprite collidedWith = game.getGrounds()
-						.collisionDetection(player.getX(), player.getY(),
-								pwidth, pheight);
-
-				if (collidedWith != null) {
-					player.stopFalling();
-					/*
-					 * TODO: check collision, getY eror -> o update?
-					 * player.setY(collidedWith.getHitarea().getY1()-pheight);
-					 */
-					//player.setY(collidedWith.getHitarea().getY1()-pheight);
-					Log.d(TAG, "Current Player Y: "+player.getY());
-					
-					
-					game.setFloor(collidedWith.getFloor());
-					Log.d(TAG, "Set Player Y: "+player.getY());
-					player.jump();
+		
+		if( !game.isPaused() ) {
+			if (player.isJumping()) {
+	
+				if (player.getJumpHeight() < 0) {
+					GroundSprite collidedWith = game.getGrounds()
+							.collisionDetection(player.getX(), player.getY(),
+									pwidth, pheight);
+	
+					if (collidedWith != null) {
+						player.stopFalling();
+						/*
+						 * TODO: check collision, getY eror -> o update?
+						 * player.setY(collidedWith.getHitarea().getY1()-pheight);
+						 */
+						//player.setY(collidedWith.getHitarea().getY1()-pheight);
+						Log.d(TAG, "Current Player Y: "+player.getY());
+						
+						
+						game.setFloor(collidedWith.getFloor());
+						Log.d(TAG, "Set Player Y: "+player.getY());
+						player.jump();
+					}
+				} else {
+	
+					if (player.getY() < stageHeight / 2) {
+						// int y = stageHeight/3 - player.getY();
+						game.getGrounds().moveGrounds((int) player.getJumpHeight());
+						player.setY(player.getY() + (int) player.getJumpHeight());
+					}
 				}
-			} else {
-
-				if (player.getY() < stageHeight / 2) {
-					// int y = stageHeight/3 - player.getY();
-					game.getGrounds().moveGrounds((int) player.getJumpHeight());
-					player.setY(player.getY() + (int) player.getJumpHeight());
-				}
+	
 			}
 
+			try {
+				player.gravity();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				// e.printStackTrace();
+			}
 		}
-
+		
 		player.draw(canvas);
-		try {
-			player.gravity();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			// e.printStackTrace();
-		}
+		
 		pad.draw(canvas);
 		displayFps(canvas, avgFps);
 	}
@@ -242,6 +274,7 @@ public class MainGamePanel extends SurfaceView implements
 	 */
 	public void update() {
 
+		Log.d(TAG, TAG);
 		if (isTouched) {
 			collides(lastX, lastY);
 		}
