@@ -22,11 +22,17 @@ public class Game {
 
 	private Paint paint = new Paint();
 	private Grounds grounds;
-	
+	private BackgroundBitmap background;
+	private BitmapSprite[] bitmaps;
 	
 	public Game(Bitmap topbar, int x, int y, Bitmap groundbmp, int stageWidth, int stageHeight) {
 
 		scale = (float)stageWidth/topbar.getWidth();
+		
+		/*
+		 * TODO: init bitmaps, x & y
+		 */
+		this.background = new BackgroundBitmap( bitmaps );
 		
 		//Log.d("Game", "Stage: "+stageWidth+" Width: "+bitmap.getWidth()+" Scale: "+scale);
 		this.topbar = Bitmap.createScaledBitmap(topbar, (int)(scale*topbar.getWidth()), (int)(scale*topbar.getHeight()), true);
@@ -94,8 +100,15 @@ public class Game {
 		this.isPaused = isPaused;
 	}
 
+	public void scrollBitmap( int move ) {
+	
+		this.background.scroll( move/10 );
+	}
+	
 	public void draw(Canvas canvas) {
-		grounds.draw(canvas);
+		
+		this.background.draw(canvas);
+		this.grounds.draw(canvas);
 		
 		canvas.drawBitmap(topbar, x, y, null);
 		canvas.drawText(Integer.toString(time), (int)(100*scale)+x, (int)(55*scale)+y, paint);

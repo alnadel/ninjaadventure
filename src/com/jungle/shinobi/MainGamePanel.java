@@ -247,6 +247,7 @@ public class MainGamePanel extends SurfaceView implements
 					if (player.getY() < stageHeight / 2) {
 						// int y = stageHeight/3 - player.getY();
 						game.getGrounds().moveGrounds((int) player.getJumpHeight());
+						game.scrollBitmap((int) player.getJumpHeight());
 						player.setY(player.getY() + (int) player.getJumpHeight());
 					}
 				}
